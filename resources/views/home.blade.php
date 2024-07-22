@@ -1,4 +1,5 @@
 <x-layout>
+    <x-header></x-header>
     <section>
         <div class="container p-4">
             <div class="col d-flex">
