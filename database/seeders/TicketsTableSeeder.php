@@ -14,7 +14,7 @@ class TicketsTableSeeder extends Seeder
     {
         DB::table('tickets')->insert([
             [
-                'concert_id' => 1,
+                'concert_id' => 6,
                 'type' => 'VIP',
                 'price' => 200.00,
                 'quantity' => 50,
@@ -22,7 +22,7 @@ class TicketsTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'concert_id' => 1,
+                'concert_id' => 6,
                 'type' => 'General Admission',
                 'price' => 100.00,
                 'quantity' => 200,
@@ -30,7 +30,7 @@ class TicketsTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'concert_id' => 2,
+                'concert_id' => 7,
                 'type' => 'VIP',
                 'price' => 250.00,
                 'quantity' => 40,
@@ -38,7 +38,7 @@ class TicketsTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'concert_id' => 2,
+                'concert_id' => 7,
                 'type' => 'General Admission',
                 'price' => 120.00,
                 'quantity' => 150,

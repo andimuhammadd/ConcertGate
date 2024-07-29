@@ -1,48 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Toko</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-</head>
-
-<body>
-    <div class="container">
-        <h1>Invoice</h1>
-        <div class="card" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">Detail Pesanan</h5>
-                <table>
-                    <tr>
-                        <td>Nama: </td>
-                        <td>: {{$order->firstname}} {{$order->lastname}}</td>
-                    </tr>
-                    <tr>
-                        <td>No Hp: </td>
-                        <td>: {{$order->phone}}</td>
-                    </tr>
-                    <tr>
-                        <td>Email:</td>
-                        <td>: {{$order->email}}</td>
-                    </tr>
-                    <tr>
-                        <td>Total Price:</td>
-                        <td>: {{$order->total_price}}</td>
-                    </tr>
-                    <tr>
-                        <td>Status: </td>
-                        <td>: {{$order->status}}</td>
-                    </tr>
-                </table>
+<x-layout>
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card rounded">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h5 class="mb-0">Invoice</h5>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-title">Detail Pesanan</h6>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <th scope="row">Nama:</th>
+                                    <td>{{ $order->firstname }} {{ $order->lastname }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">No Hp:</th>
+                                    <td>{{ $order->phone }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Email:</th>
+                                    <td>{{ $order->email }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Total Pembayaran:</th>
+                                    <td>Rp. {{ number_format($order->total_price, 2, ',', '.') }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Status:</th>
+                                    <td>{{ ucfirst($order->status) }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="text-center">
+                            <button class="btn btn-primary">Lakukan Pembelian Lain</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
-
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-</body>
-
-</html>
+</x-layout>

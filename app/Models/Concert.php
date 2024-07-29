@@ -24,4 +24,9 @@ class Concert extends Model
     {
         return $this->hasMany(Ticket::class);
     }
+
+    public function getQty()
+    {
+        return $this->tickets()->sum('quantity');
+    }
 }

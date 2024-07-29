@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Concert;
+use App\Models\Ticket;
 
 class TicketController extends Controller
 {
@@ -12,7 +13,8 @@ class TicketController extends Controller
      */
     public function index()
     {
-        //
+        $tickets = Ticket::all();
+        return view('auth.ticket', compact('tickets'));
     }
 
     /**
@@ -28,7 +30,8 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Ticket::create($request->all());
+        return redirect()->route('tickets.index');
     }
 
     /**
@@ -52,16 +55,20 @@ class TicketController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $ticket = Ticket::findOrFail($id);
+        $ticket->update($request->all());
+        return redirect()->route('tickets.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $ticket = Ticket::findOrFail($id);
+        $ticket->delete();
+        return redirect()->route('tickets.index');
     }
 }

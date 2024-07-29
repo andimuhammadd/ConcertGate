@@ -30,7 +30,14 @@ class ConcertController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $concert = new Concert();
+        $concert->name = $request->name;
+        $concert->description = $request->description;
+        $concert->date = $request->date;
+        $concert->venue = $request->venue;
+        $concert->save();
+
+        return redirect()->route('admin.concert')->with('success', 'Concert added successfully');
     }
 
     /**
@@ -46,24 +53,34 @@ class ConcertController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $concert = Concert::findOrFail($id);
+        return view('admin.edit-concert', compact('concert'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $concert = Concert::findOrFail($id);
+        $concert->name = $request->name;
+        $concert->description = $request->description;
+        $concert->date = $request->date;
+        $concert->venue = $request->venue;
+        $concert->save();
+
+        return redirect()->route('admin.concert')->with('success', 'Concert updated successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $concert = Concert::findOrFail($id);
+        $concert->delete();
+        return redirect()->route('admin.concert')->with('success', 'Concert deleted successfully');
     }
 }

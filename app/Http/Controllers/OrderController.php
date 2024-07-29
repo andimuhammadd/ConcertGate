@@ -7,7 +7,15 @@ use Midtrans\Config;
 use App\Models\Order;
 use App\Models\Ticket;
 use App\Models\OrderItem;
+use App\Models\Payment;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderConfirmationMail;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Storage;
+use App\Mail\TicketMail;
+
 
 class OrderController extends Controller
 {
@@ -16,7 +24,8 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //
+        $orders = Order::all();
+        return view('auth.orders.index', compact('orders'));
     }
 
     /**
@@ -63,7 +72,7 @@ class OrderController extends Controller
         ];
 
         $callbacks = [
-            'finish' => "https://92ef-45-126-185-170.ngrok-free.app/api/midtrans-finish",
+            'finish' => "https://b194-116-206-33-37.ngrok-free.app/api/midtrans-finish",
         ];
 
         // Create transaction parameters
@@ -78,9 +87,13 @@ class OrderController extends Controller
             // Get payment URL from Midtrans
             $paymentUrl = \Midtrans\Snap::createTransaction($params)->redirect_url;
 
+            // Send confirmation email
+            Mail::to($order->email)->send(new OrderConfirmationMail($order, $paymentUrl));
+
             // Redirect to payment page
             return redirect($paymentUrl);
         } catch (\Exception $e) {
+            log::error('Error during checkout:', ['error' => $e->getMessage()]);
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
@@ -110,7 +123,7 @@ class OrderController extends Controller
                 'lastname' => $request->input('last_name'),
                 'phone' => $request->input('phone'),
                 'total_price' => $ticket->price,
-                'status' => 'unpaid',
+                'status' => 'pending',
             ]);
 
             // Create Order Item
@@ -127,11 +140,35 @@ class OrderController extends Controller
         } else {
             return response()->json(['error' => 'Order creation failed'], 500);
         }
-        // dd($_POST);
+    }
+
+    protected function generateAndSendTicket(Order $order)
+    {
+        // Load view for the ticket
+        $pdf = PDF::loadView('tickets.ticket', compact('order'));
+
+        // Define file name and path
+        $fileName = 'ticket_' . $order->id . '.pdf';
+        $filePath = storage_path('app/public/' . $fileName);
+
+        // Save the PDF to the storage
+        $pdf->save($filePath);
+
+        // Send the ticket via email
+        Mail::to($order->email)->send(new TicketMail($order, $filePath));
     }
 
     public function callback(Request $request)
     {
+        // Validasi data masuk
+        $request->validate([
+            'order_id' => 'required|string',
+            'status_code' => 'required|string',
+            'gross_amount' => 'required|numeric',
+            'signature_key' => 'required|string',
+            'transaction_status' => 'required|string',
+        ]);
+
         // Ambil server key dari konfigurasi
         $serverKey = config('midtrans.server_key');
 
@@ -141,14 +178,42 @@ class OrderController extends Controller
         // Periksa apakah signature key yang diterima sama dengan hash yang dihasilkan
         if ($hashed === $request->signature_key) {
             // Periksa status transaksi
-            if ($request->transaction_status == 'capture' or $request->transaction_status == 'settlement') {
+            if ($request->transaction_status === 'capture' || $request->transaction_status === 'settlement') {
                 // Cari order berdasarkan order_id
                 $order = Order::find($request->order_id);
-                // Perbarui status order menjadi 'paid'
-                $order->update(['status' => 'paid']);
+
+                if ($order) {
+                    // Perbarui status order menjadi 'paid'
+                    $order->update(['status' => 'paid']);
+
+                    // Simpan informasi pembayaran ke tabel payments
+                    $payment = new Payment();
+                    $payment->order_id = $order->id;
+                    $payment->amount = $request->gross_amount;
+                    $payment->payment_method = $request->payment_type ?? 'unknown'; // Menyimpan metode pembayaran
+                    $payment->payment_status = $request->transaction_status;
+                    $payment->transaction_id = $request->transaction_id ?? null; // Menyimpan ID transaksi jika ada
+                    $payment->save();
+                    
+                    // Generate and send ticket
+                    $this->generateAndSendTicket($order);
+                } else {
+                    // Log jika order tidak ditemukan
+                    Log::error('Order not found for order_id: ' . $request->order_id);
+                }
+            } elseif ($request->transaction_status === 'cancel' || $request->transaction_status === 'expire') {
+                // Jika transaksi dibatalkan atau kedaluwarsa
+                $order = Order::find($request->order_id);
+                if ($order) {
+                    $order->update(['status' => 'canceled']);
+                }
             }
+        } else {
+            // Log jika hash tidak cocok
+            Log::error('Signature key mismatch for order_id: ' . $request->order_id);
         }
     }
+
 
     public function invoice(Request $request)
     {
@@ -165,9 +230,10 @@ class OrderController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $orderItem = OrderItem::findOrFail($id);
+        return view('auth.orders.show', compact('orderItem'));
     }
 
     /**
@@ -181,16 +247,20 @@ class OrderController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $order = Order::findOrFail($id);
+        $order->update($request->all());
+        return redirect()->route('admin.order')->with('success', 'Order updated successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $order = Order::findOrFail($id);
+        $order->delete();
+        return redirect()->route('auth.orders')->with('success', 'Order deleted successfully');
     }
 }
