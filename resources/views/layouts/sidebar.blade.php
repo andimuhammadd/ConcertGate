@@ -21,7 +21,7 @@
                         <span>
                             <i class="ti ti-layout-dashboard"></i>
                         </span>
-                        <span class="hide-menu">Concert</span>
+                        <span class="hide-menu">Konser</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
@@ -29,15 +29,23 @@
                         <span>
                             <i class="ti ti-layout-dashboard"></i>
                         </span>
-                        <span class="hide-menu">Tickets</span>
+                        <span class="hide-menu">Tiket</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ route('admin.order') }}" aria-expanded="false">
+                    <a class="sidebar-link" href="{{ route('admin.orders') }}" aria-expanded="false">
                         <span>
                             <i class="ti ti-layout-dashboard"></i>
                         </span>
-                        <span class="hide-menu">Transaction</span>
+                        <span class="hide-menu">Transaksi</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="{{route('admin.report')}}" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-layout-dashboard"></i>
+                        </span>
+                        <span class="hide-menu">Laporan</span>
                     </a>
                 </li>
             </ul>

@@ -12,6 +12,112 @@ body {
     padding: 20px;
 }
 
+.concert-container {
+    max-width: 1200px;
+    margin: auto;
+}
+
+.concert-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.concert-col {
+    flex: 1;
+}
+
+.concert-border {
+    border: 1px solid #ddd;
+}
+
+.concert-p-4 {
+    padding: 16px;
+}
+
+.concert-rounded-4 {
+    border-radius: 8px;
+}
+
+.concert-mt-3 {
+    margin-top: 16px;
+}
+
+.concert-px-2 {
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+/* Section Styles */
+.concert-featured-events, .concert-upcoming-events {
+    margin-bottom: 40px;
+}
+
+h2 {
+    color: #d83565;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Event Card Styles */
+.concert-event-card {
+    display: flex;
+    border: 1px solid #ccc;
+    margin: 25px 0;
+    border-radius: 24px;
+    line-height: 10px;
+}
+
+.concert-event-image {
+    flex: 0 0 220px; /* Adjust as needed for width */
+    height: auto;
+    overflow: hidden;
+}
+
+.concert-event-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-top-Left-radius: 24px;
+    border-bottom-Left-radius: 24px;
+}
+
+.concert-event-info {
+    flex-grow: 1;
+    padding-left: 15px; /* Add padding if needed */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 10px 10px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: auto;
+}
+
+.concert-btn {
+    padding: 10px 20px;
+    text-align: center;
+    background-color: #007BFF;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.concert-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Upcoming Events Styles */
+.concert-event-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .bi-heart-fill {
     font-size: 2rem;
     color: gray;

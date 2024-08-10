@@ -7,11 +7,15 @@
     "require": {
         "php": "^8.1",
         "barryvdh/laravel-dompdf": "^2.2",
+        "endroid/qr-code": "^5.0",
+        "fortawesome/font-awesome": "^6.6",
         "guzzlehttp/guzzle": "^7.2",
+        "icehouse-ventures/laravel-chartjs": "^3.0",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "laravel/ui": "^4.5",
+        "maatwebsite/excel": "^3.1",
         "midtrans/midtrans-php": "^2.5"
     },
     "require-dev": {

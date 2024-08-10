@@ -2,263 +2,98 @@
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8">
-	<title>CodePen - Admit One Ticket (Aug 2021 #CodePenChallenge)</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Concert Ticket</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
 
-	<style>
-		@import url("https://fonts.googleapis.com/css2?family=Staatliches&display=swap");
-		@import url("https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap");
+        .ticket {
+            background-image: url('https://th.bing.com/th/id/OIP.GOqlRRTt6BZAFRPN-GqYPQHaE9?rs=1&pid=ImgDetMain');
+            border: 2px solid #d83565;
+            color: #f4f4f4;
+            border-radius: 10px;
+            width: 600px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin: auto;
+            position: relative;
+            overflow: hidden;
+        }
 
-		* {
-			margin: 0;
-			padding: 0;
-			box-sizing: border-box;
-		}
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
 
-		body,
-		html {
-			height: 100vh;
-			display: grid;
-			font-family: "Staatliches", cursive;
-			background: #d83565;
-			color: black;
-			font-size: 14px;
-			letter-spacing: 0.1em;
-		}
+        .header h1 {
+            font-size: 28px;
+            margin: 0;
+            color: #d83565;
+        }
 
-		.ticket {
-			margin: auto;
-			display: flex;
-			background: white;
-			box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
-		}
+        .details {
+            margin-top: 40px;
+            /* Ensure details start below the strip */
+        }
 
-		.left {
-			display: flex;
-		}
+        .details p {
+            margin: 5px 0;
+            font-size: 16px;
+            line-height: 1.5;
+        }
 
-		.image {
-			height: 250px;
-			width: 250px;
-			background-image: url("https://media.pitchfork.com/photos/60db53e71dfc7ddc9f5086f9/1:1/w_1656,h_1656,c_limit/Olivia-Rodrigo-Sour-Prom.jpg");
-			background-size: contain;
-			opacity: 0.85;
-		}
+        .artist {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: #d83565;
+            margin-bottom: 10px;
+        }
 
-		.admit-one {
-			position: absolute;
-			color: darkgray;
-			height: 250px;
-			padding: 0 10px;
-			letter-spacing: 0.15em;
-			display: flex;
-			text-align: center;
-			justify-content: space-around;
-			writing-mode: vertical-rl;
-			transform: rotate(-180deg);
-		}
+        .qr-code {
+            text-align: center;
+            margin-top: 20px;
+        }
 
-		.admit-one span:nth-child(2) {
-			color: white;
-			font-weight: 700;
-		}
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 12px;
+            color: #777;
+        }
 
-		.left .ticket-number {
-			height: 250px;
-			width: 250px;
-			display: flex;
-			justify-content: flex-end;
-			align-items: flex-end;
-			padding: 5px;
-		}
-
-		.ticket-info {
-			padding: 10px 30px;
-			display: flex;
-			flex-direction: column;
-			text-align: center;
-			justify-content: space-between;
-			align-items: center;
-		}
-
-		.date {
-			border-top: 1px solid gray;
-			border-bottom: 1px solid gray;
-			padding: 5px 0;
-			font-weight: 700;
-			display: flex;
-			align-items: center;
-			justify-content: space-around;
-		}
-
-		.date span {
-			width: 100px;
-		}
-
-		.date span:first-child {
-			text-align: left;
-		}
-
-		.date span:last-child {
-			text-align: right;
-		}
-
-		.date .june-29 {
-			color: #d83565;
-			font-size: 20px;
-		}
-
-		.show-name {
-			font-size: 32px;
-			font-family: "Nanum Pen Script", cursive;
-			color: #d83565;
-		}
-
-		.show-name h1 {
-			font-size: 48px;
-			font-weight: 700;
-			letter-spacing: 0.1em;
-			color: #4a437e;
-		}
-
-		.time {
-			padding: 10px 0;
-			color: #4a437e;
-			text-align: center;
-			display: flex;
-			flex-direction: column;
-			gap: 10px;
-			font-weight: 700;
-		}
-
-		.time span {
-			font-weight: 400;
-			color: gray;
-		}
-
-		.left .time {
-			font-size: 16px;
-		}
-
-
-		.location {
-			display: flex;
-			justify-content: space-around;
-			align-items: center;
-			width: 100%;
-			padding-top: 8px;
-			border-top: 1px solid gray;
-		}
-
-		.location .separator {
-			font-size: 20px;
-		}
-
-		.right {
-			width: 180px;
-			border-left: 1px dashed #404040;
-		}
-
-		.right .admit-one {
-			color: darkgray;
-		}
-
-		.right .admit-one span:nth-child(2) {
-			color: gray;
-		}
-
-		.right .right-info-container {
-			height: 250px;
-			padding: 10px 10px 10px 35px;
-			display: flex;
-			flex-direction: column;
-			justify-content: space-around;
-			align-items: center;
-		}
-
-		.right .show-name h1 {
-			font-size: 18px;
-		}
-
-		.barcode {
-			height: 100px;
-		}
-
-		.barcode img {
-			height: 100%;
-		}
-
-		.right .ticket-number {
-			color: gray;
-		}
-	</style>
+        /* Style for the Ticket Number */
+        .ticket-number {
+            font-weight: bold;
+            color: #d83565;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 
 <body>
-	<!-- partial:index.partial.html -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-
-	<div class="ticket">
-		<div class="left">
-			<div class="image">
-				<p class="admit-one">
-					<span>ADMIT ONE</span>
-					<span>ADMIT ONE</span>
-					<span>ADMIT ONE</span>
-				</p>
-				<div class="ticket-number">
-					<p>
-						#20030220
-					</p>
-				</div>
-			</div>
-			<div class="ticket-info">
-				<p class="date">
-					<span>TUESDAY</span>
-					<span class="june-29">JUNE 29TH</span>
-					<span>2021</span>
-				</p>
-				<div class="show-name">
-					<h1>SOUR Prom</h1>
-					<h2>Olivia Rodrigo</h2>
-				</div>
-				<div class="time">
-					<p>8:00 PM <span>TO</span> 11:00 PM</p>
-					<p>DOORS <span>@</span> 7:00 PM</p>
-				</div>
-				<p class="location"><span>East High School</span>
-					<span class="separator"><i class="far fa-smile"></i></span><span>Salt Lake City, Utah</span>
-				</p>
-			</div>
-		</div>
-		<div class="right">
-			<p class="admit-one">
-				<span>ADMIT ONE</span>
-				<span>ADMIT ONE</span>
-				<span>ADMIT ONE</span>
-			</p>
-			<div class="right-info-container">
-				<div class="show-name">
-					<h1>SOUR Prom</h1>
-				</div>
-				<div class="time">
-					<p>8:00 PM <span>TO</span> 11:00 PM</p>
-					<p>DOORS <span>@</span> 7:00 PM</p>
-				</div>
-				<div class="barcode">
-					<img src="https://external-preview.redd.it/cg8k976AV52mDvDb5jDVJABPrSZ3tpi1aXhPjgcDTbw.png?auto=webp&s=1c205ba303c1fa0370b813ea83b9e1bddb7215eb" alt="QR code">
-				</div>
-				<p class="ticket-number">
-					#20030220
-				</p>
-			</div>
-		</div>
-	</div>
-	<!-- partial -->
-	<script src="./script.js"></script>
-
+    <div class="ticket">
+        <div class="">
+            <h1>{{ $concert->name }} Ticket</h1>
+        </div>
+        <div class="details">
+            <p><strong>Date:</strong> {{ \Carbon\Carbon::parse($concert->date)->format('F d, Y') }}</p>
+            <p><strong>Time:</strong> {{ \Carbon\Carbon::parse($concert->date)->format('g:i A') }}</p>
+            <p><strong>Venue:</strong> {{ $venue }}</p>
+            <p><strong>Ticket Type:</strong> {{ $ticketType }}</p>
+            <p class=""><strong>Ticket Number:</strong> #{{ $ticketNumber }}</p>
+        </div>
+        <div class="footer">
+            <p>Thank you for your purchase!</p>
+        </div>
+    </div>
 </body>
 
 </html>

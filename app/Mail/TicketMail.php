@@ -5,25 +5,27 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use App\Models\Order;
 
 class TicketMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $order;
-    public $filePath;
+    public $ticketFilePath;
 
-    public function __construct(Order $order, $filePath)
+    public function __construct($order, $ticketFilePath)
     {
         $this->order = $order;
-        $this->filePath = $filePath;
+        $this->ticketFilePath = $ticketFilePath;
     }
 
     public function build()
     {
         return $this->view('emails.ticket')
             ->subject('Your Concert Ticket')
-            ->attach($this->filePath);
+            ->attach($this->ticketFilePath, [
+                'as' => 'Your_Ticket.pdf',
+                'mime' => 'application/pdf',
+            ]);
     }
 }

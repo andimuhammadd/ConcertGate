@@ -6,10 +6,10 @@
     <div class="card">
         <div class="card-body">
             <h5 class="card-title">Order #{{ $orderItem->order->id }}</h5>
-            <p><strong>Customer:</strong> {{ $orderItem->order->email }}</p>
-            <p><strong>Concert:</strong> {{ $orderItem->ticket->concert->name }}</p>
-            <p><strong>Ticket Type:</strong> {{ $orderItem->ticket->type }}</p>
-            <p><strong>Total Price:</strong> {{ $orderItem->order->total_price }}</p>
+            <p><strong>Email Pembeli:</strong> {{ $orderItem->order->email }}</p>
+            <p><strong>Konser:</strong> {{ $orderItem->ticket->concert->name }}</p>
+            <p><strong>Jenis Tiket:</strong> {{ $orderItem->ticket->type }}</p>
+            <p><strong>Harga Total:</strong> {{ $orderItem->order->total_price }}</p>
             <p><strong>Status:</strong> {{ $orderItem->order->status }}</p>
 
             <form action="{{ route('admin.orders.update', $orderItem->order->id) }}" method="POST">

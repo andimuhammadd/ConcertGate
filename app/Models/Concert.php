@@ -29,4 +29,20 @@ class Concert extends Model
     {
         return $this->tickets()->sum('quantity');
     }
+
+    public function getTotalSoldAttribute()
+    {
+        return $this->tickets->sum(function ($ticket) {
+            return $ticket->orderItems->sum('quantity');
+        });
+    }
+
+    public function getTotalRevenueAttribute()
+    {
+        return $this->tickets->sum(function ($ticket) {
+            return $ticket->orderItems->sum(function ($orderItem) {
+                return $orderItem->price * $orderItem->quantity;
+            });
+        });
+    }
 }

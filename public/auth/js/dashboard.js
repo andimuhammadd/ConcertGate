@@ -2,15 +2,14 @@ $(function () {
 
 
   // =====================================
-  // Profit
-  // =====================================
-  var chart = {
-    series: [
-      { name: "Earnings this month:", data: [355, 390, 300, 350, 390, 180, 355, 390] },
-      { name: "Expense this month:", data: [280, 250, 325, 215, 250, 310, 280, 250] },
-    ],
+// Ticket Sales Chart
+// =====================================
+var ticketSalesChart = {
+  series: [
+      { name: "Tickets Sold this month:", data: [150, 200, 180, 220, 210, 160, 170, 230] },
+  ],
 
-    chart: {
+  chart: {
       type: "bar",
       height: 345,
       offsetX: -15,
@@ -18,91 +17,84 @@ $(function () {
       foreColor: "#adb0bb",
       fontFamily: 'inherit',
       sparkline: { enabled: false },
-    },
+  },
 
+  colors: ["#5D87FF", "#49BEFF"],
 
-    colors: ["#5D87FF", "#49BEFF"],
-
-
-    plotOptions: {
+  plotOptions: {
       bar: {
-        horizontal: false,
-        columnWidth: "35%",
-        borderRadius: [6],
-        borderRadiusApplication: 'end',
-        borderRadiusWhenStacked: 'all'
+          horizontal: false,
+          columnWidth: "35%",
+          borderRadius: [6],
+          borderRadiusApplication: 'end',
+          borderRadiusWhenStacked: 'all'
       },
-    },
-    markers: { size: 0 },
+  },
+  markers: { size: 0 },
 
-    dataLabels: {
+  dataLabels: {
       enabled: false,
-    },
+  },
 
-
-    legend: {
+  legend: {
       show: false,
-    },
+  },
 
-
-    grid: {
+  grid: {
       borderColor: "rgba(0,0,0,0.1)",
       strokeDashArray: 3,
       xaxis: {
-        lines: {
-          show: false,
-        },
+          lines: {
+              show: false,
+          },
       },
-    },
+  },
 
-    xaxis: {
+  xaxis: {
       type: "category",
       categories: ["16/08", "17/08", "18/08", "19/08", "20/08", "21/08", "22/08", "23/08"],
       labels: {
-        style: { cssClass: "grey--text lighten-2--text fill-color" },
+          style: { cssClass: "grey--text lighten-2--text fill-color" },
       },
-    },
+  },
 
-
-    yaxis: {
+  yaxis: {
       show: true,
       min: 0,
       max: 400,
       tickAmount: 4,
       labels: {
-        style: {
-          cssClass: "grey--text lighten-2--text fill-color",
-        },
+          style: {
+              cssClass: "grey--text lighten-2--text fill-color",
+          },
       },
-    },
-    stroke: {
+  },
+  stroke: {
       show: true,
       width: 3,
       lineCap: "butt",
       colors: ["transparent"],
-    },
+  },
 
+  tooltip: { theme: "light" },
 
-    tooltip: { theme: "light" },
-
-    responsive: [
+  responsive: [
       {
-        breakpoint: 600,
-        options: {
-          plotOptions: {
-            bar: {
-              borderRadius: 3,
-            }
-          },
-        }
+          breakpoint: 600,
+          options: {
+              plotOptions: {
+                  bar: {
+                      borderRadius: 3,
+                  }
+              },
+          }
       }
-    ]
+  ]
+};
 
+var chart = new ApexCharts(document.querySelector("#chart"), ticketSalesChart);
+chart.render();
 
-  };
-
-  var chart = new ApexCharts(document.querySelector("#chart"), chart);
-  chart.render();
 
 
   // =====================================

@@ -17,7 +17,7 @@
 
     <x-navbar></x-navbar>
 
-    <div class="container">
+    <div class="container" style="margin-top: 100px;">
         {{ $slot }}
     </div>
 

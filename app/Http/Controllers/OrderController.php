@@ -39,7 +39,7 @@ class OrderController extends Controller
         return view('order.create-order', compact('ticket', 'concert'));
     }
 
-    public function checkout(Order $order, Request $request)
+    public function checkout(Order $order)
     {
         // Set Midtrans configuration
         Config::$serverKey = env('MIDTRANS_SERVER_KEY');
@@ -72,7 +72,7 @@ class OrderController extends Controller
         ];
 
         $callbacks = [
-            'finish' => "https://b194-116-206-33-37.ngrok-free.app/api/midtrans-finish",
+            'finish' => "https://a7d9-125-165-17-2.ngrok-free.app/api/midtrans-finish",
         ];
 
         // Create transaction parameters
@@ -142,21 +142,44 @@ class OrderController extends Controller
         }
     }
 
-    protected function generateAndSendTicket(Order $order)
+    public function generateAndSendTicket(Order $order)
     {
-        // Load view for the ticket
-        $pdf = PDF::loadView('tickets.ticket', compact('order'));
+        // Mengambil data yang diperlukan dari order
+        $concert = $order->orderItems->first()->ticket->concert;
+        $venue = $concert->venue;
+        $ticketType = $order->orderItems->first()->ticket->type;
+        $ticketPrice = $order->orderItems->first()->ticket->price;
+        $ticketId = $order->orderItems->first()->ticket->id;
+        $orderId = $order->id;
 
-        // Define file name and path
-        $fileName = 'ticket_' . $order->id . '.pdf';
-        $filePath = storage_path('app/public/' . $fileName);
+        // Format tanggal concert
+        $concertDate = \Carbon\Carbon::parse($concert->date)->format('Y-m-d'); // Format sesuai keinginan
 
-        // Save the PDF to the storage
-        $pdf->save($filePath);
+        // Generate ticket number
+        $ticketNumber = strtolower(str_replace(' ', '_', $concert->name)) . '-' . $concertDate . '-' . $ticketId . '-' . $orderId;
 
-        // Send the ticket via email
-        Mail::to($order->email)->send(new TicketMail($order, $filePath));
+        // Generate PDF untuk tiket menggunakan tampilan
+        $pdf = PDF::loadView('tickets.ticket', [
+            'concert' => $concert,
+            'ticketType' => $ticketType,
+            'ticketPrice' => $ticketPrice,
+            'ticketNumber' => $ticketNumber,
+            'order' => $order,
+            'venue' => $venue,
+        ]);
+
+        // Definisikan nama dan path file
+        $ticketFileName = 'ticket_' . $order->id . '.pdf';
+        $ticketFilePath = storage_path('app/public/' . $ticketFileName);
+
+        // Simpan PDF ke dalam storage
+        $pdf->save($ticketFilePath);
+
+        // Kirim tiket melalui email
+        Mail::to($order->email)->send(new TicketMail($order, $ticketFilePath));
     }
+
+
 
     public function callback(Request $request)
     {
@@ -194,7 +217,7 @@ class OrderController extends Controller
                     $payment->payment_status = $request->transaction_status;
                     $payment->transaction_id = $request->transaction_id ?? null; // Menyimpan ID transaksi jika ada
                     $payment->save();
-                    
+
                     // Generate and send ticket
                     $this->generateAndSendTicket($order);
                 } else {
@@ -213,7 +236,6 @@ class OrderController extends Controller
             Log::error('Signature key mismatch for order_id: ' . $request->order_id);
         }
     }
-
 
     public function invoice(Request $request)
     {
@@ -250,8 +272,21 @@ class OrderController extends Controller
     public function update(Request $request, $id)
     {
         $order = Order::findOrFail($id);
+
+        // Store the old status to check for changes
+        $oldStatus = $order->status;
+
+        // Update the order
         $order->update($request->all());
-        return redirect()->route('admin.order')->with('success', 'Order updated successfully');
+
+        // Check if the status was updated to 'paid' from 'unpaid' or 'pending'
+        if ($oldStatus === 'Unpaid' || $oldStatus === 'Pending') {
+            if ($order->status === 'Paid') {
+                $this->generateAndSendTicket($order);
+            }
+        }
+
+        return redirect()->route('admin.orders')->with('success', 'Order updated successfully');
     }
 
     /**
